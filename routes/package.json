@@ -12,7 +12,7 @@
     "@aws-sdk/client-ses": "^3.46.0",
     "@aws-sdk/util-dynamodb": "^3.46.0",
     "compound-parser": "^1.0.4",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "nanoid": "^3.1.31",
     "prettier": "^2.5.1",
     "ramda": "^0.27.2",
