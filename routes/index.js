@@ -44,6 +44,7 @@ const routeToFunctionLookup = {
 };
 
 exports.handler = async (event) => {
+  console.log(event);
   const response = await routeToFunctionLookup[event.params.path.route](event);
   response.version = require("./package.json").version;
   return response;
