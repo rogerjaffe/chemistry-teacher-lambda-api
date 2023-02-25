@@ -1,0 +1,66 @@
+name: deploy to lambda with a loop
+on: [push]
+jobs:
+  deploy_lambdas:
+    name: deploy lambda
+    strategy:
+      matrix:
+        node-version: [14.x]
+        files: [authenticate,
+                checkAnswer,
+                changePassword,
+                confirmAccount,
+                createAccount,
+                getQuestion,
+                getStudentList,
+                getTeacherList,
+                resetPassword,
+                sendConfirmAccountEmail,
+                sendPasswordResetEmail
+        ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Install aws node_modules
+        run: npm install
+        working-directory: ./helpers/aws
+
+      - name: Install getTeacher node_modules
+        run: npm install
+        working-directory: ./helpers/getTeacher
+
+      - name: Install hash node_modules
+        run: npm install
+        working-directory: ./helpers/hash
+
+      - name: Install sendEmail node_modules
+        run: npm install
+        working-directory: ./helpers/sendEmail
+
+      - name: Install validateJwt node_modules
+        run: npm install
+        working-directory: ./helpers/validateJwt
+
+      - name: Install node_modules in ${{ matrix.files }}
+        run: npm install
+        working-directory: ./lambdas/${{ matrix.files }}
+
+      - name: Zip ${{ matrix.files }}
+        run: zip -r ${{ matrix.files }}.zip . -x ${{ matrix.files }}.zip -x *.test.js -x testHandler.js
+        working-directory: ./lambdas/${{ matrix.files }}
+
+      - name: deploy lambda ${{ matrix.files }}
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: ${{ matrix.files }}
+          zip_file: ./lambdas/${{ matrix.files }}/${{ matrix.files }}.zip

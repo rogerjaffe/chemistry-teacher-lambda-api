@@ -1,0 +1,15 @@
+{
+  "name": "lambdas",
+  "version": "2.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "layer": "./layer-setup.sh",
+    "zip-getQuestion": "cd routes/functions/getQuestion && zip -r getQuestion.zip . -x node_modules -x *.zip",
+    "zip-checkAnswer": "cd routes/functions/checkAnswer && zip -r checkAnswer.zip . -x node_modules -x *.zip",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

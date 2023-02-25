@@ -1,0 +1,9 @@
+**/node_modules
+**/.idea
+**/coverage*
+**/*.zip
+aws-credentials.txt
+**/private_key.pem
+**/public_key.pem
+**/testHandler.js
+**/format.js
